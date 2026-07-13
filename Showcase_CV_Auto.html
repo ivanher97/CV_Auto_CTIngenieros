@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CV Auto Processor — Presentación del proyecto</title>
+<meta name="description" content="CV Auto Processor: de PDF a Word corporativo con IA. Presentación para RRHH y visión técnica para PM.">
+<style>
+    :root {
+        --bg: #0b1322;
+        --surface: #111c30;
+        --surface-2: #17233c;
+        --ink: #f1f5f9;
+        --ink-2: #a5b4c8;
+        --ink-3: #7d8aa0;
+        --accent: #38bdf8;
+        --accent-soft: rgba(56, 189, 248, 0.12);
+        --accent-line: rgba(56, 189, 248, 0.35);
+        --border: rgba(148, 163, 184, 0.16);
+        --radius: 16px;
+        --ok: #34d399;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+        font-family: "Segoe UI", -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif;
+        background: var(--bg);
+        color: var(--ink);
+        line-height: 1.65;
+        background-image:
+            radial-gradient(circle at 12% 0%, rgba(56, 189, 248, 0.09), transparent 32%),
+            radial-gradient(circle at 88% 85%, rgba(139, 92, 246, 0.07), transparent 30%);
+    }
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 0 1.5rem; }
+
+    /* ── Barra superior con selector de audiencia ─────────────── */
+    .topbar {
+        position: sticky; top: 0; z-index: 50;
+        background: rgba(11, 19, 34, 0.88);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid var(--border);
+    }
+    .topbar .wrap {
+        display: flex; align-items: center; justify-content: space-between;
+        gap: 1rem; padding-top: 0.7rem; padding-bottom: 0.7rem; flex-wrap: wrap;
+    }
+    .brand { font-weight: 700; font-size: 1rem; letter-spacing: 0.2px; display: flex; align-items: center; gap: 0.6rem; }
+    .brand .v { font-size: 0.72rem; font-weight: 600; color: var(--accent); background: var(--accent-soft); border: 1px solid var(--accent-line); padding: 0.1rem 0.55rem; border-radius: 999px; }
+    .seg { display: flex; background: var(--surface); border: 1px solid var(--border); border-radius: 999px; padding: 0.25rem; gap: 0.25rem; }
+    .seg button {
+        font: inherit; font-size: 0.88rem; font-weight: 600;
+        color: var(--ink-2); background: transparent; border: 0;
+        padding: 0.45rem 1.1rem; border-radius: 999px; cursor: pointer;
+        transition: background 0.2s, color 0.2s;
+    }
+    .seg button:hover { color: var(--ink); }
+    .seg button.active { background: var(--accent); color: #06121f; }
+
+    /* ── Hero ─────────────────────────────────────────────────── */
+    header.hero { text-align: center; padding: 4.5rem 0 3rem; }
+    .kicker {
+        display: inline-block; font-size: 0.8rem; font-weight: 700; letter-spacing: 2px;
+        text-transform: uppercase; color: var(--accent); margin-bottom: 1rem;
+    }
+    h1 { font-size: clamp(2.2rem, 5.5vw, 3.6rem); font-weight: 800; letter-spacing: -1px; margin-bottom: 1rem; }
+    h1 .grad { background: linear-gradient(100deg, #f1f5f9 30%, var(--accent)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .pitch { font-size: 1.15rem; color: var(--ink-2); max-width: 640px; margin: 0 auto; }
+
+    /* ── Stat tiles ───────────────────────────────────────────── */
+    .tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin: 2.6rem 0 0; }
+    .tile {
+        background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+        padding: 1.15rem 1.25rem; text-align: left;
+    }
+    .tile .label { font-size: 0.8rem; color: var(--ink-3); margin-bottom: 0.25rem; }
+    .tile .value { font-size: 1.9rem; font-weight: 650; color: var(--ink); line-height: 1.15; }
+    .tile .note { font-size: 0.8rem; color: var(--ink-2); margin-top: 0.2rem; }
+
+    /* ── Secciones ────────────────────────────────────────────── */
+    section { padding: 2.4rem 0; }
+    h2 { font-size: 1.6rem; font-weight: 750; margin-bottom: 0.4rem; letter-spacing: -0.3px; }
+    .sub { color: var(--ink-2); margin-bottom: 1.6rem; max-width: 720px; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; }
+    .card {
+        background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+        padding: 1.4rem 1.5rem; transition: border-color 0.25s, transform 0.25s;
+    }
+    .card:hover { border-color: var(--accent-line); transform: translateY(-3px); }
+    .card .ico { font-size: 1.5rem; margin-bottom: 0.6rem; display: block; }
+    .card h3 { font-size: 1.02rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .card p { font-size: 0.92rem; color: var(--ink-2); }
+
+    .duo { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.6rem 1.7rem; }
+    .panel.trouble { border-left: 3px solid #f87171; }
+    .panel.fix { border-left: 3px solid var(--ok); }
+    .panel h3 { font-size: 1.05rem; margin-bottom: 0.5rem; }
+    .panel p, .panel li { color: var(--ink-2); font-size: 0.95rem; }
+    .panel ul { padding-left: 1.1rem; margin-top: 0.5rem; }
+    .panel li { margin-bottom: 0.35rem; }
+
+    /* ── Pipeline interactivo ─────────────────────────────────── */
+    .steps { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+    .step {
+        flex: 1 1 150px; font: inherit; text-align: left; cursor: pointer;
+        background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+        padding: 0.9rem 1rem; color: var(--ink-2); transition: all 0.2s;
+    }
+    .step .n {
+        display: inline-flex; align-items: center; justify-content: center;
+        width: 1.6rem; height: 1.6rem; border-radius: 50%; font-size: 0.8rem; font-weight: 700;
+        background: var(--surface-2); color: var(--ink-2); margin-bottom: 0.45rem;
+    }
+    .step .t { display: block; font-weight: 650; font-size: 0.92rem; color: var(--ink); }
+    .step:hover { border-color: var(--accent-line); }
+    .step.active { border-color: var(--accent); background: var(--accent-soft); }
+    .step.active .n { background: var(--accent); color: #06121f; }
+    .step-detail {
+        background: var(--surface); border: 1px solid var(--accent-line); border-radius: var(--radius);
+        padding: 1.5rem 1.7rem; min-height: 7.5rem;
+    }
+    .step-detail h3 { font-size: 1.05rem; margin-bottom: 0.4rem; color: var(--accent); }
+    .step-detail p { color: var(--ink-2); font-size: 0.97rem; }
+    .hint { font-size: 0.8rem; color: var(--ink-3); margin-top: 0.6rem; }
+
+    /* ── FAQ ──────────────────────────────────────────────────── */
+    .faq { display: grid; gap: 0.6rem; }
+    .faq-item { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+    .faq-q {
+        width: 100%; font: inherit; font-weight: 650; font-size: 0.97rem; color: var(--ink);
+        background: transparent; border: 0; text-align: left; cursor: pointer;
+        padding: 1rem 1.3rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+    }
+    .faq-q::after { content: '+'; font-size: 1.3rem; color: var(--accent); transition: transform 0.25s; flex-shrink: 0; }
+    .faq-item.open .faq-q::after { transform: rotate(45deg); }
+    .faq-a { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+    .faq-item.open .faq-a { max-height: 220px; }
+    .faq-a p { padding: 0 1.3rem 1.1rem; color: var(--ink-2); font-size: 0.93rem; }
+
+    /* ── Vista técnica: módulos ───────────────────────────────── */
+    .modules { display: grid; grid-template-columns: repeat(auto-fit, minmax(215px, 1fr)); gap: 0.8rem; margin-bottom: 1rem; }
+    .module {
+        font: inherit; text-align: left; cursor: pointer;
+        background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+        padding: 1rem 1.1rem; color: var(--ink-2); transition: all 0.2s;
+    }
+    .module code { font-family: Consolas, "Cascadia Code", monospace; font-size: 0.88rem; color: var(--ink); font-weight: 600; display: block; margin-bottom: 0.3rem; }
+    .module span { font-size: 0.83rem; }
+    .module:hover { border-color: var(--accent-line); }
+    .module.active { border-color: var(--accent); background: var(--accent-soft); }
+
+    .decision { border-left: 3px solid var(--accent); }
+    .decision h3 { color: var(--ink); }
+    .decision .why { color: var(--accent); font-weight: 650; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 0.4rem; }
+
+    .chips { display: flex; flex-wrap: wrap; gap: 0.55rem; }
+    .chip {
+        font-size: 0.85rem; color: var(--ink-2); background: var(--surface);
+        border: 1px solid var(--border); border-radius: 8px; padding: 0.35rem 0.85rem;
+    }
+    .chip b { color: var(--ink); font-weight: 600; }
+
+    .estado { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.6rem 1.7rem; }
+    .estado h3 { margin-bottom: 0.6rem; }
+    .estado p { color: var(--ink-2); font-size: 0.95rem; margin-bottom: 0.5rem; }
+
+    /* ── Vistas por audiencia ─────────────────────────────────── */
+    body[data-view="hr"] .only-pm { display: none; }
+    body[data-view="pm"] .only-hr { display: none; }
+
+    footer { border-top: 1px solid var(--border); margin-top: 3rem; padding: 2.2rem 0 2.6rem; text-align: center; }
+    footer .sig { font-weight: 700; font-size: 1.05rem; }
+    footer .role { color: var(--ink-2); font-size: 0.9rem; }
+    footer .conf { color: var(--ink-3); font-size: 0.8rem; margin-top: 0.9rem; max-width: 560px; margin-left: auto; margin-right: auto; }
+
+    @media (max-width: 860px) {
+        .tiles { grid-template-columns: repeat(2, 1fr); }
+        .duo { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+        .tiles { grid-template-columns: 1fr; }
+        header.hero { padding-top: 3rem; }
+    }
+</style>
+</head>
+<body data-view="hr">
+
+<nav class="topbar">
+    <div class="wrap">
+        <div class="brand">📄 CV Auto Processor <span class="v">V3.1</span></div>
+        <div class="seg" role="tablist" aria-label="Nivel de detalle">
+            <button type="button" data-view-btn="hr" class="active" role="tab" aria-selected="true">👥 Visión general</button>
+            <button type="button" data-view-btn="pm" role="tab" aria-selected="false">⚙️ Visión técnica</button>
+        </div>
+    </div>
+</nav>
+
+<header class="hero">
+    <div class="wrap">
+        <span class="kicker">Automatización documental con IA</span>
+        <h1><span class="grad">De un CV en PDF a un Word corporativo</span><br>en segundos</h1>
+        <p class="pitch">Aplicación de escritorio que lee un currículum en PDF, estructura su contenido con IA generativa y lo entrega maquetado sobre la plantilla corporativa — con revisión humana antes de que ningún dato salga del equipo.</p>
+
+        <div class="tiles">
+            <div class="tile"><div class="label">Pasos para el usuario</div><div class="value">3</div><div class="note">Seleccionar · revisar · generar</div></div>
+            <div class="tile"><div class="label">Modelos de IA a elegir</div><div class="value">3</div><div class="note">Familia Google Gemini Flash</div></div>
+            <div class="tile"><div class="label">Archivos generados por CV</div><div class="value">3</div><div class="note">Word final + JSON + texto extraído</div></div>
+            <div class="tile"><div class="label">Instalación necesaria</div><div class="value">0</div><div class="note">Se distribuye como ejecutable (.exe)</div></div>
+        </div>
+    </div>
+</header>
+
+<main class="wrap">
+
+    <!-- ══════════ VISIÓN GENERAL (RRHH) ══════════ -->
+    <section class="only-hr">
+        <h2>El problema y la solución</h2>
+        <p class="sub">Pasar currículums recibidos en cualquier formato a la plantilla corporativa es un trabajo manual, lento y propenso a errores de copia.</p>
+        <div class="duo">
+            <div class="panel trouble">
+                <h3>😓 Antes</h3>
+                <ul>
+                    <li>Leer cada PDF y transcribir experiencia, formación y habilidades a mano.</li>
+                    <li>Copiar y pegar en la plantilla de Word cuidando el formato.</li>
+                    <li>Errores de transcripción y estilos rotos difíciles de detectar.</li>
+                    <li>Minutos —a veces horas— por cada candidato.</li>
+                </ul>
+            </div>
+            <div class="panel fix">
+                <h3>✨ Ahora</h3>
+                <ul>
+                    <li>Se selecciona el PDF y la aplicación extrae el texto al instante.</li>
+                    <li>La persona revisa ese texto (y borra lo que no deba salir del equipo).</li>
+                    <li>Un clic: la IA organiza la información y rellena la plantilla corporativa.</li>
+                    <li>El Word queda guardado junto al PDF original, listo para retocar.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="only-hr">
+        <h2>Lo que aporta</h2>
+        <div class="cards">
+            <div class="card"><span class="ico">⏱️</span><h3>Ahorro de tiempo real</h3><p>Lo que era transcribir y maquetar a mano se convierte en una revisión rápida y un clic.</p></div>
+            <div class="card"><span class="ico">🎨</span><h3>Formato corporativo siempre</h3><p>Todos los CV salen con la misma plantilla de la empresa: presentación homogénea ante el cliente.</p></div>
+            <div class="card"><span class="ico">🔒</span><h3>Privacidad bajo control</h3><p>El archivo PDF nunca se envía a ningún sitio. Solo viaja el texto que la persona ha revisado y aprobado antes.</p></div>
+            <div class="card"><span class="ico">🖱️</span><h3>Sin barrera técnica</h3><p>Es un programa de escritorio con dos botones. No requiere instalar nada ni saber de informática.</p></div>
+        </div>
+    </section>
+
+    <section class="only-hr">
+        <h2>Preguntas frecuentes</h2>
+        <div class="faq">
+            <div class="faq-item">
+                <button type="button" class="faq-q" aria-expanded="false">¿Se envía el CV a internet?</button>
+                <div class="faq-a"><p>El archivo PDF nunca sale del ordenador. Lo único que se envía a la IA es el texto que la persona ya ha revisado en pantalla — y puede borrar de él cualquier dato antes de continuar.</p></div>
+            </div>
+            <div class="faq-item">
+                <button type="button" class="faq-q" aria-expanded="false">¿Y si la IA se equivoca u omite algo?</button>
+                <div class="faq-a"><p>La respuesta de la IA se comprueba automáticamente contra una estructura obligatoria antes de generar nada; si no encaja, la aplicación avisa. Además, el resultado es un Word normal: siempre se puede retocar a mano.</p></div>
+            </div>
+            <div class="faq-item">
+                <button type="button" class="faq-q" aria-expanded="false">¿Necesito conocimientos técnicos para usarla?</button>
+                <div class="faq-a"><p>No. Es un programa de escritorio que se abre con doble clic (un .exe, sin instalación) y el flujo completo son dos botones: seleccionar el PDF y generar el Word.</p></div>
+            </div>
+            <div class="faq-item">
+                <button type="button" class="faq-q" aria-expanded="false">¿Dónde quedan guardados los resultados?</button>
+                <div class="faq-a"><p>En la misma carpeta que el PDF original: el Word final con la plantilla corporativa y los archivos intermedios del proceso, por si hiciera falta consultarlos.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════ PIPELINE (compartido, con doble lectura) ══════════ -->
+    <section>
+        <h2>Cómo funciona, paso a paso</h2>
+        <p class="sub">Haz clic en cada paso para ver el detalle. La explicación cambia según la vista elegida arriba (general o técnica).</p>
+        <div class="steps" id="steps"></div>
+        <div class="step-detail" id="stepDetail"></div>
+        <p class="hint">💡 Consejo: cambia entre «Visión general» y «Visión técnica» en la barra superior y vuelve a pulsar un paso.</p>
+    </section>
+
+    <!-- ══════════ VISIÓN TÉCNICA (PM) ══════════ -->
+    <section class="only-pm">
+        <h2>Arquitectura por módulos</h2>
+        <p class="sub">Diseño modular: interfaz, conversión de formatos y contrato de datos viven separados. Haz clic en un módulo.</p>
+        <div class="modules" id="modules"></div>
+        <div class="step-detail" id="moduleDetail"></div>
+    </section>
+
+    <section class="only-pm">
+        <h2>Decisiones técnicas y su porqué</h2>
+        <div class="cards">
+            <div class="card decision"><span class="why">Fiabilidad</span><h3>JSON Schema como contrato con el LLM</h3><p>La salida del modelo se valida contra un esquema estricto antes de tocar el Word. Un modelo probabilístico se convierte así en una pieza determinista: o la respuesta cumple el contrato, o falla de forma explícita — nunca un documento corrupto en silencio.</p></div>
+            <div class="card decision"><span class="why">Privacidad y coste</span><h3>Extracción de texto 100 % local</h3><p>El PDF se procesa en el equipo con <b>pypdf</b> y limpieza de artefactos OCR. A la API solo viaja texto plano ya revisado: menos superficie de exposición de datos personales y menos tokens facturados.</p></div>
+            <div class="card decision"><span class="why">Cumplimiento</span><h3>Human-in-the-loop antes de la API</h3><p>El paso de revisión no es cosmético: es el punto de control donde se eliminan datos sensibles antes de salir del equipo. La decisión de qué ve la IA es siempre humana.</p></div>
+            <div class="card decision"><span class="why">Mantenibilidad</span><h3>Plantillas docxtpl separadas del código</h3><p>La presentación vive en la plantilla <code>.docx</code>; el código solo inyecta datos. Cambiar la imagen corporativa no requiere tocar una línea de Python.</p></div>
+            <div class="card decision"><span class="why">Coste / latencia</span><h3>Modelos Flash seleccionables</h3><p>Gemini 2.5 Flash, 3 Flash (preview) y 3.1 Flash Lite, elegibles desde la interfaz: permite ajustar el equilibrio calidad-coste-velocidad según el lote de CVs.</p></div>
+        </div>
+    </section>
+
+    <section class="only-pm">
+        <h2>Stack tecnológico</h2>
+        <div class="chips">
+            <span class="chip"><b>Python 3.10+</b></span>
+            <span class="chip"><b>google-genai</b> · SDK oficial Gemini</span>
+            <span class="chip"><b>Tkinter (ttk)</b> · GUI de escritorio</span>
+            <span class="chip"><b>pypdf</b> · extracción local de texto</span>
+            <span class="chip"><b>docxtpl</b> · renderizado de plantillas Word</span>
+            <span class="chip"><b>jsonschema</b> · validación de salida del LLM</span>
+            <span class="chip"><b>python-dotenv</b> · configuración</span>
+            <span class="chip"><b>PyInstaller</b> · empaquetado .exe</span>
+        </div>
+    </section>
+
+    <section class="only-pm">
+        <h2>Estado del proyecto</h2>
+        <div class="estado">
+            <h3>Prototipo funcional en uso</h3>
+            <p>Es la más ligera de las tres aplicaciones del portfolio (~700 líneas): un pipeline enfocado que hace una cosa y la hace bien. Se distribuye como ejecutable autocontenido y ha pasado por varias iteraciones de versión (builds V1.3 y V1.3.1 empaquetadas).</p>
+            <p><b>Evolución natural:</b> añadir una suite de tests automatizados del pipeline (hoy no la tiene), endurecer el manejo de errores de la API y procesar lotes de CVs en una sola pasada.</p>
+        </div>
+    </section>
+
+</main>
+
+<footer>
+    <div class="wrap">
+        <div class="sig">Iván Herrero Galván</div>
+        <div class="role">Applied AI &amp; Automation</div>
+        <p class="conf">El código fuente de este proyecto es confidencial por motivos empresariales. Esta página describe el producto y su arquitectura a alto nivel, sin exponer implementación.</p>
+    </div>
+</footer>
+
+<script>
+(function () {
+    'use strict';
+
+    /* ── Selector de audiencia ── */
+    var viewBtns = document.querySelectorAll('[data-view-btn]');
+    viewBtns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            document.body.dataset.view = btn.dataset.viewBtn;
+            viewBtns.forEach(function (b) {
+                b.classList.toggle('active', b === btn);
+                b.setAttribute('aria-selected', b === btn ? 'true' : 'false');
+            });
+            renderStepDetail();
+            renderModuleDetail();
+        });
+    });
+
+    /* ── Pipeline interactivo ── */
+    var STEPS = [
+        {
+            t: 'Cargar el PDF',
+            hr: 'La persona elige el currículum desde su equipo. La aplicación lo lee al momento y muestra su contenido como texto en pantalla. El archivo no sale del ordenador en ningún momento.',
+            pm: 'Extracción local con pypdf y normalización a texto plano/Markdown. Un paso de limpieza (ocr_cleanup) elimina artefactos típicos de PDFs escaneados con expresiones regulares antes de mostrar nada al usuario.'
+        },
+        {
+            t: 'Revisar y proteger',
+            hr: 'Antes de usar la IA, la persona ve todo el texto extraído en un editor. Puede corregir errores de lectura y, sobre todo, borrar cualquier dato sensible que no deba salir del equipo.',
+            pm: 'Punto de control human-in-the-loop: el editor Tkinter permite editar el texto que será el único contenido enviado a la API. Es la garantía de privacidad del diseño — la decisión de exposición de datos es explícita y humana.'
+        },
+        {
+            t: 'La IA estructura los datos',
+            hr: 'Con un clic, la inteligencia artificial lee el texto y lo organiza en secciones: experiencia, formación, habilidades… Si algo no encaja con lo esperado, la aplicación lo detecta y avisa.',
+            pm: 'Llamada a Gemini (modelo seleccionable: 2.5 Flash / 3 Flash preview / 3.1 Flash Lite) con instrucción de salida estructurada. La respuesta se valida contra un JSON Schema versionado: si no cumple el contrato, el fallo es explícito, nunca silencioso.'
+        },
+        {
+            t: 'Word corporativo listo',
+            hr: 'La aplicación rellena la plantilla oficial de la empresa con los datos y guarda el Word junto al PDF original, junto con los archivos intermedios por si hay que consultarlos.',
+            pm: 'Renderizado con docxtpl sobre la plantilla .docx corporativa (word_model/). Se persisten los tres artefactos (.json validado, .md de la IA, .docx final) junto al PDF de origen para trazabilidad del proceso.'
+        }
+    ];
+
+    var stepsEl = document.getElementById('steps');
+    var stepDetailEl = document.getElementById('stepDetail');
+    var currentStep = 0;
+
+    STEPS.forEach(function (s, i) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'step' + (i === 0 ? ' active' : '');
+        b.innerHTML = '<span class="n">' + (i + 1) + '</span><span class="t">' + s.t + '</span>';
+        b.addEventListener('click', function () {
+            currentStep = i;
+            stepsEl.querySelectorAll('.step').forEach(function (el, j) {
+                el.classList.toggle('active', j === i);
+            });
+            renderStepDetail();
+        });
+        stepsEl.appendChild(b);
+    });
+
+    function renderStepDetail() {
+        var s = STEPS[currentStep];
+        var mode = document.body.dataset.view === 'pm' ? 'pm' : 'hr';
+        stepDetailEl.innerHTML = '<h3>Paso ' + (currentStep + 1) + ' — ' + s.t + '</h3><p>' + s[mode] + '</p>';
+    }
+
+    /* ── Módulos (vista técnica) ── */
+    var MODULES = [
+        { c: 'interfaz/', s: 'GUI y configuración', d: 'Interfaz Tkinter (ttk) con el flujo completo: selección de PDF, editor de revisión, selector de modelo y lanzamiento de la generación. config_manager gestiona preferencias y la API key vía .env (python-dotenv). La GUI orquesta, no contiene lógica de negocio.' },
+        { c: 'format_converter/', s: 'El pipeline de conversión', d: 'Cadena de transformación en módulos independientes: pdf_to_md (extracción con pypdf) → ocr_cleanup (limpieza con regex) → ia_extractor (comunicación con Gemini) → json_to_word (renderizado docxtpl). Cada eslabón tiene una única responsabilidad y puede evolucionar por separado.' },
+        { c: 'json_schema/', s: 'El contrato de datos', d: 'Esquemas JSON versionados (v1.0 y v1.1) que definen exactamente qué estructura debe devolver el LLM: campos, tipos y anidamiento de experiencia, educación y habilidades. Es la frontera formal entre el mundo probabilístico (IA) y el determinista (documento).' },
+        { c: 'word_model/', s: 'Plantillas corporativas', d: 'Plantillas .docx con placeholders de docxtpl. La identidad visual vive aquí, fuera del código: actualizar la marca es reemplazar un archivo, sin despliegue nuevo.' }
+    ];
+
+    var modulesEl = document.getElementById('modules');
+    var moduleDetailEl = document.getElementById('moduleDetail');
+    var currentModule = 0;
+
+    MODULES.forEach(function (m, i) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'module' + (i === 0 ? ' active' : '');
+        b.innerHTML = '<code>' + m.c + '</code><span>' + m.s + '</span>';
+        b.addEventListener('click', function () {
+            currentModule = i;
+            modulesEl.querySelectorAll('.module').forEach(function (el, j) {
+                el.classList.toggle('active', j === i);
+            });
+            renderModuleDetail();
+        });
+        modulesEl.appendChild(b);
+    });
+
+    function renderModuleDetail() {
+        if (!moduleDetailEl) return;
+        var m = MODULES[currentModule];
+        moduleDetailEl.innerHTML = '<h3>' + m.c + ' · ' + m.s + '</h3><p>' + m.d + '</p>';
+    }
+
+    /* ── FAQ acordeón ── */
+    document.querySelectorAll('.faq-q').forEach(function (q) {
+        q.addEventListener('click', function () {
+            var item = q.parentElement;
+            var wasOpen = item.classList.contains('open');
+            document.querySelectorAll('.faq-item.open').forEach(function (o) { o.classList.remove('open'); });
+            if (!wasOpen) item.classList.add('open');
+            q.setAttribute('aria-expanded', String(!wasOpen));
+        });
+    });
+
+    renderStepDetail();
+    renderModuleDetail();
+})();
+</script>
+
+</body>
+</html>
